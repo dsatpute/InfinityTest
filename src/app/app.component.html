@@ -1,0 +1,118 @@
+<div class="container mt-4 pt-3 pb-3 container-host">
+<div class="jumbotron">
+  <form [formGroup]="deviceFrm" (ngSubmit)="onSubmit(deviceFrm.value)">
+    <div class="row form-group">
+      <input type="hidden" formControlName="sNo">
+      <div class="col">
+        <label for="host"><strong>HostName:</strong></label>
+        <input type="text" class="form-control" id="host" placeholder="HostName" formControlName="hostName">
+        <code *ngIf="(deviceFrm.controls['hostName'].hasError('required') && submitAttempt)"> HostName required</code>
+        <code *ngIf="(deviceFrm.controls['hostName'].hasError('pattern') && submitAttempt)">Invalid format data</code>
+      </div>
+      <div class="col">
+        <label for="loopback"><strong>LoopBack:</strong></label>
+        <input type="text" class="form-control" id="loopback" placeholder="Loopback" formControlName="loopBack">
+        <code *ngIf="(deviceFrm.controls['loopBack'].hasError('required') && submitAttempt)">LoopBack required</code>
+        <code *ngIf="(deviceFrm.controls['loopBack'].hasError('pattern') && submitAttempt)">Invalid format data</code>
+      </div>
+      <div class="col pt-4">
+        <label style="display:block"></label>
+        <button type="submit" class="btn btn-primary">ADD</button>
+      </div>
+    </div>
+  </form>
+</div>
+  <div>
+    <table *ngIf="deviceData.length>0">
+      <tr>
+        <th>Sr No</th>
+        <th>HostName</th>
+        <th>LoopBack</th>
+        <th>Action</th>
+      </tr>
+      <tr *ngFor="let data of deviceData" class="mt-2">
+        <td>{{data.sNo}}</td>
+        <td>{{data.hostName}}</td>
+        <td>{{data.loopBack}}</td>
+        <td class="row mt-2">
+          <div class="col-1 mr-1">
+            <button class="btn btn-primary btn-sm" (click)="editRow(data,'form')">
+              <span class="fa fa-pencil"></span>
+            </button>
+          </div>
+          <div class="col-1 ml-1 mr-1">
+            <button class=" btn btn-primary btn-sm" (click)="onDelete(data,'deviceData')">
+              <span class="fa fa-trash"></span>
+            </button>
+          </div>
+          <div class="col-1">
+            <button class="btn btn-primary btn-sm" (click)="showDetails(data)">
+             <span class="fa fa-eye"></span>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="visible" class="dialog container">
+  <div class="container">
+    <div class="row pt-2 pb-2 header-border">
+      <div class="col font-weight-bold">EDIT INTERFACES</div>
+      <div>
+        <button (click)="close()" aria-label="Close" class="dialog__close-btn">X</button>
+      </div>
+    </div>
+    <form [formGroup]="interfaceFrm" class="pt-2">
+      <div class="row form-group">
+        <input type="hidden" formControlName="ifSrNo">
+        <input type="hidden" formControlName="sNo">
+        <div class="col">
+          <label for="if">Interface:</label>
+          <input type="text" class="form-control" id="if" placeholder="Interface" formControlName="interfaceName">
+          <code *ngIf="(interfaceFrm.controls['interfaceName'].hasError('required') && submitAttempt)">Interface required</code>
+        </div>
+        <div class="col">
+          <label for="ip">IP:</label>
+          <input type="text" class="form-control" id="ip" placeholder="IP Address" formControlName="ipAddress">
+          <code *ngIf="(interfaceFrm.controls['ipAddress'].hasError('required') && submitAttempt)">IP required</code>
+          <code *ngIf="(interfaceFrm.controls['ipAddress'].hasError('pattern') && submitAttempt)">Invalid IP format</code>
+        </div>
+        <div class="col pt-4">
+          <label style="display:block"></label>
+          <button type="submit" class="btn btn-primary" (click)="submitIfValues(interfaceFrm.value)">ADD</button>
+        </div>
+      </div>
+    </form>
+    <div>
+      <div *ngIf="interfaceObj.length>0" class="font-weight-bold">Interfaces</div>
+      <table *ngIf="interfaceObj.length>0" class="interface-table">
+        <tr>
+          <th>Sr No</th>
+          <th>Interface</th>
+          <th>IP</th>
+          <th>Action</th>
+        </tr>
+        <tr *ngFor="let data of interfaceObj" class="mt-2">
+          <td>{{data.ifSrNo}}</td>
+          <td>{{data.interfaceName}}</td>
+          <td>{{data.ipAddress}}</td>
+          <td class="row mt-1">
+            <div class="col-2 mr-1">
+              <button class="btn btn-primary btn-sm" (click)="editRow(data,'interfaceFrm')">
+                <span class="fa fa-pencil"></span>
+              </button>
+            </div>
+            <div class="col-2">
+              <button class=" btn btn-primary btn-sm" (click)="onDelete(data,'interfaceObj')">
+                <span class="fa fa-trash"></span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+<div *ngIf="visible" class="overlay" (click)="close()"></div>
